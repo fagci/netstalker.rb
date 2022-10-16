@@ -1,0 +1,14 @@
+GEM
+  specs:
+    multiprocess-threads (0.0.1)
+    wan-ip-gen (1.0.2)
+
+PLATFORMS
+  aarch64-linux-android
+
+DEPENDENCIES
+  multiprocess-threads
+  wan-ip-gen
+
+BUNDLED WITH
+   2.3.23
