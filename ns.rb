@@ -25,8 +25,8 @@ end
 parallel.work(1024) do
   WAN.each do |ip|
     Socket.tcp(ip, 80, connect_timeout: 0.75) do |s|
-      s << REQ_TPL % ip
-      Timeout.timeout(5) do
+      Timeout.timeout(15) do
+        s << REQ_TPL % ip
         write("http://#{ip}#{URL}") if s.recv(1024) =~ /Index of/
       end
     end
