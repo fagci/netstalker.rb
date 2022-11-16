@@ -18,17 +18,13 @@ REQ_TPL = <<~REQUEST.gsub("\n", "\r\n")
 
 REQUEST
 
-parallel = MPThreads::Parallel.new do |url|
-  puts url
-end
+parallel = MPThreads::Parallel.new(&method(:puts))
 
 parallel.work(1024) do
-  WAN.each do |ip|
-    Socket.tcp(ip, 80, connect_timeout: 0.75) do |s|
-      Timeout.timeout(15) do
-        s << REQ_TPL % ip
-        write("http://#{ip}#{URL}") if s.recv(1024) =~ /Index of/
-      end
+  WAN.each_socket do |s, ip|
+    Timeout.timeout(15) do
+      s << REQ_TPL % ip
+      write("http://#{ip}#{URL}") if s.recv(1024) =~ /Index of/
     end
   rescue SystemCallError, Timeout::Error
     next
